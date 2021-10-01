@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<PreloadedObjects>
+
+	<!-- Everytime Objects (show always, even client position is not in radius range) -->
+	<!-- Everytime objects will sends to APRS clients each 2.5 minutes (You can use it for ex. HOME, START, CHECKPOINT or FINISH) -->
+	
+	<obj name="MAK-UB" symbol="\R" lat="55.548532" lon="37.543301" radius="-1">McDonalds Uzhnoe Butovo</obj>		
+	<obj name="BK-UB" symbol="\R" lat="55.551413" lon="37.528101" radius="-1">Burger King Uzhnoe Butovo</obj>		
+		
+	<!-- Static Objects (show if client position is in radius range) -->
+	<!-- Static objects will sends to APRS each 45 seconds (You can use if for ex. Gas Stations, Medical, Cafe, etc.) -->
+	
+	<obj name="KFC-UB" symbol="\R" lat="55.543382" lon="37.531811" radius="8">KFC Uzhnoe Butovo</obj>
+	<obj name="BK-MKLP" symbol="\R" lat="55.57281" lon="37.67396" radius="5">BK, MKAD, Lipeskaya</obj>
+	<obj name="BK-MKVA" symbol="\R" lat="55.577517" lon="37.59718" radius="5">BK, MKAD, Varshavka</obj>		
+	
+	<obj name="KFC-KS" symbol="\R" lat="56.05578" lon="37.53104" radius="10">KFC, TC Kashtanka</obj>
+	<obj name="MAK-IK" symbol="\R" lat="56.1477" lon="37.49104" radius="10">McDonalds, Iksha</obj>
+	<obj name="MAK-YAHR" symbol="\R" lat="56.2799218" lon="37.5020569" radius="10">McDonalds, Yahroma</obj>	
+		
+	<!--
+		radius in km (int)
+		if(radius == -1) object will show always (on web map too)
+		if(radius > 0) object information will sends to APRS client if client in object raidius range
+	-->
+</PreloadedObjects>
