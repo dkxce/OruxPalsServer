@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OruxPalsAirConfig>
+	<!-- connection parameters -->
+	<server help="OruxPalsServer (ip:port) or APRS-IS server">127.0.0.1:12015</server>
+	<callsign help="if null - using OruxPalsServer auth" />
+	<password help="if null - using OruxPalsServer auth" />
+	<filter help="APRS filter; OruxPalsServer no need filter">r/55/37/50</filter>
+	
+	<!-- listen audio input -->
+	<!-- to get device list use: oruxpalsair.exe /listaudio -->
+	<readAir help="yes / no">yes</readAir>	
+	<readAudioDeviceNo help="listen audio device (default 0)">0</readAudioDeviceNo>
+	
+	<!-- play audio signal -->
+	<!-- to get device list use: oruxpalsair.exe /listaudio -->
+	<writeAir help="yes / no">yes</writeAir>
+	<writeAudioDeviceNo help="play audio device (default 0)">0</writeAudioDeviceNo>
+	<writeAudioVolume help="from 0 to 1; by system setup (do not change) -1">-1</writeAudioVolume>
+	
+	<!-- audio signal options -->
+	<txDelayMs help="default 500; can use it for activate VOX">500</txDelayMs>
+	<txTailMs help="default 0; in normal no need to change">0</txTailMs>
+</OruxPalsAirConfig>

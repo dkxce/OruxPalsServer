@@ -1,0 +1,1 @@
+copy Empty.db StaticObjects.db /-Y

@@ -1,0 +1,140 @@
+<html>
+	<head>
+		<meta charset="utf-8"/>
+		<meta name="robots" content="noindex, follow"/>
+		<title>OruxPalsServer User Info</title>
+		<script src="../v/mapmerger.js"></script>
+		<script src="../v/jquery.js"></script>
+	</head>
+	<body>		
+		<div id="DTXT">
+			<table><tr>
+			<tr><td>User:</td><td>{user}</td><td rowspan="8">&nbsp;</td></tr></tr>
+			<tr><td>Source:</td><td>{source}</td></tr>
+			<tr><td>Received:</td><td>{received} UTC</td></tr>
+			<tr><td>Position:</td><td>{pos}</td></tr>
+			<tr><td>Speed:</td><td>{speed}</td></tr>
+			<tr><td>Heading:</td><td>{course}</td></tr>
+			<tr><td>Comment:</td><td>{comment}</td></tr>
+			<tr><td>Status:</td><td>{status}</td></tr>
+			</table>
+		</div>
+		<div id="ZM13" style="display:inline-block;"></div><div id="ZM15" style="display:inline-block;"></div>
+		<div id="zyazya"></div>		
+	</body>
+	<script>	
+		var hashusr = "";
+		if(window.location.hash) hashusr = window.location.hash.substr(1).toUpperCase();
+		
+		var pad = function(num, size) {
+			var s = num+"";
+			while (s.length < size) s = "0" + s;
+			return s;
+		};
+		
+		var HeadingToText = function(hdg)
+		{
+			var d = Math.round(hdg / 22.5);
+			switch (d)
+            {
+                case 0: return "N";
+                case 1: return "NNE";
+                case 2: return "NE";
+                case 3: return "NEE";
+                case 4: return "E";
+                case 5: return "SEE";
+                case 6: return "SE";
+                case 7: return "SSE";
+                case 8: return "S";
+                case 9: return "SSW";
+                case 10: return "SW";
+                case 11: return "SWW";
+                case 12: return "W";
+                case 13: return "NWW";
+                case 14: return "NW";
+                case 15: return "NNW";
+                case 16: return "N";
+                default: return "";
+            };
+		};
+		
+		var calcAgo = function(age) 
+		{
+			var diff = age * 1000;
+			
+			var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+			diff -=  days * (1000 * 60 * 60 * 24);
+
+			var hours = Math.floor(diff / (1000 * 60 * 60));
+			diff -= hours * (1000 * 60 * 60);
+
+			var mins = Math.floor(diff / (1000 * 60));
+			diff -= mins * (1000 * 60);
+
+			var seconds = Math.floor(diff / (1000));
+			diff -= seconds * (1000);
+			
+			var res = ((mins + hours + days) > 0 ? pad(seconds, 2) : seconds) + ' s';
+			if(mins > 0) res = ((hours + days) > 0 ? pad(mins, 2) : mins) + ' m ' + res;
+			if(hours > 0) res = (days > 0 ? pad(hours, 2) : hours) + ' h ' + res;
+			if(days > 0) res = days + ' d ' + res;
+			
+			return res;			
+		}
+		
+		var UpdateData = function(user,dt,lat,lon,speed,heading,source,id,age,symbol,registered,comment,status)
+		{
+			var mm = new MapMerger(500,300);
+			mm.InitIcon(symbol, heading, user, "../view#"+user);
+			document.getElementById('ZM13').innerHTML = mm.GetMap(lat, lon, 13);
+			document.getElementById('ZM15').innerHTML = mm.GetMap(lat, lon, 15);
+			var smbl = mm.SymbolToImage(symbol);
+			var smb = symbol + ' ' + '<span style="display:inline-block;height:24px;width:24px;font-weight:bold;color:white;text-align:center;padding:1px;' + smbl[0] + '">&nbsp;' + smbl[1] + '&nbsp;</span>';
+		
+			document.title = user + " Info"; 
+		
+			var txt = '<div><table cellpadding="1" cellspacing="1" border="0">';
+			txt += '<tr><td colspan="2" style="border-bottom: solid 2px navy;background:yellow;"><b>OruxPalsServer User Information</b></td><td style="border-bottom: solid 2px navy;background:yellow;" align="center"><a href=\"../vlmpp#' + user + '\"><b>FOLLOW</b></a></td></tr>'
+			txt += '<tr><td>User:</td><td><b style="color:maroon;">'+user+'</b> '+(registered ? "&reg;" : "")+' </td>';
+			txt += '<td rowspan="11"><a href="../vlmpp#' + user + '"><img src="../vlmpq?user=' + user + '" border="0"/></a></td>';
+			txt += '</tr>';
+			txt += '<tr><td>Source:</td><td> '+source+' </td></tr>';			
+			txt += '<tr><td>Received:</td><td> '+dt+' UTC <span style="color:maroon;">(' + calcAgo(age) + ' ago)</span></td></tr>';
+			txt += '<tr><td rowspan="3">Position:</td><td style="border-top: solid 1px navy;"> '+lat + ' ' + (lat > 0 ? "N" : "S") +' &nbsp; '+lon+' '+ (lon > 0 ? "E" : "W") + '</td></tr>';
+			var lat2 = pad(Math.floor(lat), 2)  + '&deg; ' + pad(((lat - Math.floor(lat)) * 60).toFixed(4), 2) + "' " + (lat > 0 ? "N" : "S");
+			var lon2 = pad(Math.floor(lon), 3) + '&deg; ' + pad(((lon - Math.floor(lon)) * 60).toFixed(4), 2) + "' " + (lon > 0 ? "E" : "W");
+			txt += '<tr><td> '+lat2+' &nbsp;  '+lon2+'</td></tr>';
+			var lat3 = pad(Math.floor(lat), 2)  + '&deg; ' + pad(Math.floor((lat - Math.floor(lat)) * 60), 2) + "' " + pad(((((lat - Math.floor(lat)) * 60) - Math.floor((lat - Math.floor(lat)) * 60)) * 60).toFixed(2),2) + '" ' + (lat > 0 ? "N" : "S");
+			var lon3 = pad(Math.floor(lon), 3) + '&deg; ' + pad(Math.floor((lon - Math.floor(lon)) * 60), 2) + "' " + pad(((((lon - Math.floor(lon)) * 60) - Math.floor((lon - Math.floor(lon)) * 60)) * 60).toFixed(2),2) + '" ' + (lon > 0 ? "E" : "W");
+			txt += '<tr><td style="border-bottom: solid 1px navy;"> '+lat3+' &nbsp;  '+lon3+'</td></tr>';
+			txt += '<tr><td>Speed:</td><td> '+speed+' km/h; '+(speed * 0.62137119).toFixed(1)+' mph; '+(speed / 1.852).toFixed(1)+' knots</td></tr>';
+			txt += '<tr><td>Heading:</td><td> '+heading+'&deg; '+HeadingToText(heading)+'</td></tr>';			
+			txt += '<tr><td>Symbol:</td><td> <span style="color:black;">'+smb+'</span> </td></tr>';
+			txt += '<tr><td>Comment:</td><td> <span style="color:navy;font-style:italic;">'+comment+'</span> </td></tr>';
+			txt += '<tr><td>Status:</td><td> <span style="color:maroon;font-style:italic;">'+status+'</span> </td></tr>';
+			txt += '<tr><td colspan="3" style="border-top: solid 1px navy;background:pink;font-size:3px;">&nbsp;</td></tr>';			
+			txt += '</table></div>';	
+			
+			document.getElementById('DTXT').innerHTML = txt;
+			var links = "<small><a href=\"../v/mapf.html#" + user + "\">User info</a> | <a target=\"_blank\" href=\"../vlmap#" + user + "\">View on map</a> | <a href=\"../vlmpp#" + user + "\">FOLLOW</a> | <a href=\"https://yandex.ru/maps/?text="+lat+","+lon+"\" target=\"_blank\">view on yandex</a> | <a href=\"http://maps.google.com/?q="+lat+"+"+lon+"\" target=\"_blank\">view on google</a> | <a href=\"http://qrcoder.ru/code/?geo%3A"+lat+"%2C"+lon+"&8&0"+"\" target=\"_blank\">View GEO QR Code</a><small>";
+			links += '<br/><h1 style="background:#AAFFAA;padding:10px;">Open <a href="geo:'+lat+','+lon+'">'+lat+', '+lon+'</a> in External Program</h1>';
+			document.getElementById('zyazya').innerHTML = links;
+				
+		};
+		
+		var html = document.getElementById('DTXT').innerHTML;
+		if(hashusr != '')
+			$.get("../vlist/", function(data) 
+			{
+				var robj = (new Function('','return '+data))();				
+				if((robj != null) && (robj.length > 0))
+					for (var i=0;i<robj.length;i++)
+						if(robj[i].user == hashusr)
+						{
+							UpdateData(robj[i].user,robj[i].received,robj[i].lat,robj[i].lon,robj[i].speed,robj[i].hdg,robj[i].source,robj[i].id,robj[i].age,robj[i].symbol,robj[i].r,robj[i].comment,robj[i].status);
+							return;
+						};
+				document.getElementById('DTXT').innerHTML = "NO DATA FOR "+hashusr;
+			});
+	</script>
+</html>
