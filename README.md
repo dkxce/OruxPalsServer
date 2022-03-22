@@ -47,4 +47,8 @@ directly forwarded to global APRS;
 specified in <u><service names="A" id="..."/></u> in system user name will be
 as in air packet callsign, not <u name="..."/>!
 
-<img src="window.png"/>
+<img src="window.png"/>     
+<img src="wind01.png"/>     
+<img src="wind02.png"/>     
+<img src="kmzviewer_001.png"/>     
+<img src="kmzviewer_002.png"/>
