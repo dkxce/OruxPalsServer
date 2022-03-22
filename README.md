@@ -52,3 +52,4 @@ as in air packet callsign, not <u name="..."/>!
 <img src="wind02.png"/>     
 <img src="kmzviewer_001.jpg"/>     
 <img src="kmzviewer_002.jpg"/>
+<img src="OruxMapsUsage.jpg"/>
