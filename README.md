@@ -50,5 +50,5 @@ as in air packet callsign, not <u name="..."/>!
 <img src="window.png"/>     
 <img src="wind01.png"/>     
 <img src="wind02.png"/>     
-<img src="kmzviewer_001.png"/>     
-<img src="kmzviewer_002.png"/>
+<img src="kmzviewer_001.jpg"/>     
+<img src="kmzviewer_002.jpg"/>
