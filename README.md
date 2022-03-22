@@ -1,11 +1,11 @@
 # Orux Pals Server
 
 Short about:
-This is the OruxPalsServer specially written for OruxMaps Android Application 
-(6.5.5+ for AIS and 7.0.0rc9+ for APRS). The server can receive position from
+This is the OruxPalsServer (APRS Server) specially written for OruxMaps Android Application 
+(6.5.5+ for AIS and 7.0.0rc9+ for APRS) and APRS. The server can receive position from
 OruxMaps application by GPSGate (HTTP GET) protocol, MapMyTracks protocol or
 APRS protocol. Server stores received positions and send it to all clients connected 
-by AIS or APRS. So you can watch on the map user position in real time as vessels 
+by AIS or APRS. So you can watch on the map (alse with any browser) user position in real time as vessels 
 (by AIS) or as aprs icons (by APRS) with names.
 
 To connect and send position to the server client must have unical name and password, 
