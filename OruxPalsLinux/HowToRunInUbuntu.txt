@@ -1,0 +1,107 @@
+﻿UPDATED:
+
+    13.06.2023 by dkxce
+
+STEP 1:
+
+    1.1. PUBLISH:
+      
+        HELP: 
+            https://stackoverflow.com/questions/46843863/how-to-run-a-net-core-console-application-on-linux <<
+        
+        WIN:
+            dotnet publish -c release -r ubuntu.22.04-x64 --self-contained
+
+STEP 2:
+
+    2.1 INSTALL DOTNET:
+    
+        UBUNTU:
+            sudo apt-get remove dotnet-sdk-6.0           # remove dotnet 6.0
+            sudo apt update                              # update apt
+            sudo apt-get update                          # update apt-get
+            sudo apt upgrade dotnet-sdk-7.0              # upgrade dotnet 7.0
+            sudo apt-get install dotnet-sdk-7.0          # install dotnet 7.0
+            dotnet --info                                # dotnet info
+
+    2.2 COPY AND RUN:
+
+        UBUNTU:
+            dotnet --info                                # dotnet info
+            cd /usr                                      # change dir
+            mkdir oruxpals                               # create dir for application
+            chmod 777 oruxpals                           # set access rules to directory
+            cd /usr/oruxpals                             # change dir
+            cp /../../publish/* /usr/oruxpals            # copy files from uploaded folder to application directory
+            cd /usr/oruxpals                             # change dir
+            ./OruxPalsServer                             # run from application directory
+            /usr/oruxpals/OruxPalsServer                 # run from anywhere
+
+    2.3 RUN ANOTHER THREAD:                             
+    
+        HELP:
+            https://1cloud.ru/help/linux/tmux_help
+
+        UBUNTU:
+            sudo apt-get install tmux                    # install tmux (multithread console)
+            nano /etc/tmux.conf                          # edit tmux config
+                add line: set -g mouse on                # enable mouse
+            tmux new -d /usr/oruxpals/OruxPalsServer     # create another terminal
+            tmux ls                                      # list terminals
+            tmux attach                                  # connect to active session
+            tmux attach -t 0                             # connect to session 0
+            tmux kill-session -t 0                       # kill session 0
+            tmux kill-server                             # kill * sessions
+
+        TMUX:
+            To detach (meaning exit the window to come back to later) from the tmux session,
+            use CTRL + b then d (hold ctrl, press b, let go of both of the keys, and press d).
+            Whatever program(s) you are running in the tmux session will continue going without you.
+            Ctrl+b, d                                    #  detach
+            Ctrl+b, p                                    #  previous window
+            Ctrl+b, w                                    #  next window
+            Ctrl+b, 0                                    #  swith to window 0 .. 9
+
+    2.4 SETUP/REGISTER AS SERVICE:
+
+        HELP:
+            https://swimburger.net/blog/dotnet/how-to-run-a-dotnet-core-console-app-as-a-service-using-systemd-on-linux
+
+        UBUNTU:
+            nano /usr/oruxpals/OruxPalsServer.service    #  Create service file OruxPalsServer.service (Get Environment from dotnet --info)
+            CONTENT:
+            ------------------------------------------------------------------------
+                [Unit]
+                Description = OruxPalsServer Console Service
+
+                [Service]
+                ExecStart=/usr/bin/dotnet /usr/oruxpals/OruxPalsServer.dll
+                SyslogIdentifier=OruxPalsServer
+                User=root
+                Environment=DOTNET_ROOT=/usr/lib/dotnet
+
+                [Install]
+                WantedBy=multi-user.target
+            ------------------------------------------------------------------------
+            cp /usr/oruxpals/OruxPalsServer.service /etc/systemd/system             # copy service file OruxPalsServer.service to systemd (daemon)
+            sudo systemctl daemon-reload                 # Reload Services - refresh all services in /etc/systemd/system direcory
+
+            systemctl --type=service                     # All services
+            systemctl --type=service --state=running     # All running
+            netstat -natp                                # Sockets
+
+    2.5 CONTROL SERVICE:
+
+        UBUNTU:            
+            sudo systemctl status OruxPalsServer         # Status
+            sudo systemctl start OruxPalsServer          # Start
+            sudo systemctl stop OruxPalsServer           # Stop
+            sudo systemctl disable OruxPalsServer        # Disable autorun
+            sudo systemctl enable OruxPalsServer         # Enable autorun
+            sudo systemctl reload OruxPalsServer         # Reload
+            sudo systemctl restart OruxPalsServer        # Restart
+
+            systemctl --type=service                     # All services
+            systemctl --type=service --state=running     # All running
+            netstat -natp                                # Sockets
+

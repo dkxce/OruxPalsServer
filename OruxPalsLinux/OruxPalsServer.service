@@ -1,0 +1,11 @@
+[Unit]
+Description = OruxPalsServer Console Service
+
+[Service]
+ExecStart=/usr/bin/dotnet /usr/oruxpals/OruxPalsServer.dll
+SyslogIdentifier=OruxPalsServer
+User=root
+Environment=DOTNET_ROOT=/usr/lib/dotnet
+
+[Install]
+WantedBy=multi-user.target

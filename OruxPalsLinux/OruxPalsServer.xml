@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<OruxPalsServerConfig>
+
+	<ServerName>NoName</ServerName>
+	<infoIP help="server IP address">127.0.0.1</infoIP>
+	<ListenPort help="listen tcp port" default="12015">12015</ListenPort>
+	<OnlyAPRSPort help="listen APRS port" default="0">12014</OnlyAPRSPort>
+	<OnlyAISPort help="listen AIS port" default="0">0</OnlyAISPort>
+	<OnlyHTTPPort help="listen HTTP port" default="0">12012</OnlyHTTPPort>
+	<OnlyFRSPort help="listen FRS port" default="0">0</OnlyFRSPort>
+	<maxClientAlive help="close undefined (AIS) clients if they connected more XX minutes" default="60">60</maxClientAlive>
+	<maxHours help="keep information within XX hours" default="48">48</maxHours>
+	<greenMinutes help="by default all new vessels are class A (violet) if there is no info from vessel for XX minutes - it will be class B (green)" default="60">60</greenMinutes>
+	<urlPath help="url path, must be 8-symbols length" default="oruxpals">oruxpals</urlPath>
+	<adminName help="admin name for master page">admin</adminName>
+	<adminPass help="admin pass for master page">oruxpalsadmin</adminPass>
+	<disableAIS help="Disable AIS protocol true/false">true</disableAIS>
+	<sendBack help="send back APRS packets to clients and send back FRS coordinates to source yes/no">no</sendBack>
+	<callsignToUser help="Source Callsign from all incoming APRS packets will set to userName for internal usage: yes/no">yes</callsignToUser>
+	<BlackListIP help="Ban IP Address, can be multi nodes"></BlackListIP>
+	<LocalNetwork help="Local Network Address or Regex, can be muli nodes">127.0.0.1</LocalNetwork>
+	<LocalNetwork help="Local Network Address or Regex, can be muli nodes">192.168.0.\d{1,3}</LocalNetwork>
+	
+	<!-- registered Users -->
+	<!-- You can place here users for GPSGate Tracker, where only const IMEI and variable phone number, clients with not defined phones will be closed -->
+	<users help="registered users information">
+		<!-- 
+			name - user name in system, phone - user phone for identify GPSGate Tracker client
+			forward - (string of char) for what global web service(s) server will retranslate users coordinates (can be modified through APRSDroid)
+			If users connect via APRS client in system his name always will be as defined userName in <u name="..."/>, not callsign, if callsignToUser set to yes
+			Callsign uses if user is not registered into system (but without ssid) or for forward (to & from) data to global APRS.
+		-->
+		<u name="TESTING1" phone="+11030040" forward="" aprssymbol="/>" help="sample, for real users delete this tag"/>
+		<u name="TESTING2" phone="+12345678" forward="AB" aprssymbol="/>" comment="Testing" help="sample, for real users delete this tag">
+			<!--
+				This tags <service/> determines configuration for online web service(s) (one or more) to retranslate users data.				
+				In names="..." can be any defined service(s) char(s) (1 char per 1 service). `A` means APRS (reserved), any other [B-Z] must exists in <forwardServices><service name="?"/></forwardServices>.
+				In id="..." must be user's identificator to identificate user on this(these) service(s)
+				For `A` service (APRS) `id` is Callsign, for services type m/x/o `id` is IMEI.
+				Comment - comment will send with aprs position report to APRS-IS if client is not connected by APRS client (by OruxMaps or GPSGate Tracker)  (can be modified through APRSDroid). If client connected by APRS client comment will be ignored.
+			-->
+			<service names="A" id="CLLSGN-9" help="if client connected via APRS client, data will forward only if callsign = id, not name"/>
+			<service names="B" id="MY_IMEI_IS_2151252174"/>
+		</u>
+	</users>
+	<banlist>USER001,USER002</banlist>
+		
+	<!-- CROSS GATE To Global APRS-IS Network -->
+	
+	<!--  
+		All incoming packets from APRS clients will goes to global APRS directly if client connected to server by his amateur callsign, not system userName.
+		This client must be registered <u name="..."/>, forward <u forward=".A."/> must contains `A` and must be specified `A` service with id as user's amateur callsign <u ...><service names="A" id="CALLSIGN"/></u>
+		In this way his system name will be as userName <u name="..."/>, but packets will directly forward to global APRS-IS as is, exclude messages to system (ORXPLS-GW,ORXPLS-ST,ORXPLS-CM)		
+		
+		Position packets from not APRS clients will goes to global APRS only for registered users <u name="..."/>, forward <u forward="..."/> must contains `A` and must be specified `A` service with id as user's amateur callsign <u ...><service names="A" id="CALLSIGN"/></u>
+		In this way system will generate and send poisitions reports to global APRS-IS with user defined id as callsign and user defined comment.
+		
+		Do not forget to activate this gateway option in <APRSIS aprs2global="yes"/>
+		
+		user - callsign for connect to global APRS-IS
+		password - pass for callsign
+		filter - filter for incoming packets
+		global2ais - `yes` if all position packets from global APRS-IS will send to local clients connected by AIS client (as green vessels)
+		global2aprs - `yes` if all packets from global APRS-IS will send to local clients connected by APRS client
+		aprs2global - `yes` if forward all packets from registered users connected via APRS clients directly to global APRS-IS (in <u forward="A"/> must be service `A`)
+		any2global - `yes` if send position reports from registered users connected not via APRS clients to global APRS-IS  (in <u forward="A"/> must be service `A`)
+		
+		URL format:  server:port 
+	-->
+    
+	<!-- filter help: http://aprsisce.wikidot.com/aprs-is-filters -->
+	<!-- filter: r/55.55/37.55/25 p/R/U b/UB3APB* g/UB3APB* f/UB3APB/25 f/UB3APB-7/25 -->
+	<APRSIS name="A" user="ORXPLS-GW" password="-1" filter="r/55.55/37.55/25" global2ais="no" global2aprs="yes" global2frs="no" aprs2global="yes" any2global="no">euro.aprs2.net:14580</APRSIS>
+	
+	<!-- determines user defined tracking web services -->
+	<forwardServices help="use to forward incoming data to online tracking services">
+		<!-- 
+			name - any service name of 1 char from B to Z [B-Z]
+			type - type of service; 
+				m: service for incoming Meitrack GT60 (Meitrack for ruhavik.gps-trace.com) packets; 
+				x: service for incoming Xenun TK-102B packets; 
+				o: OPENGPS APIS, see at http://opengps.net/configure.php
+				b: BIG BROTHER GPS POST format with IMEI 
+		    forward - `yes` if send position reports from registered users to this service (remember to specify forward field for each user <u forward="..?.."><service names="..?.." id="IMEI"></service></u>) 
+			`m`/`x` URL format:  server:port 
+			`o` URL format: http://updates.opengps.net/index.php?key=APIKEY, where APIKEY - your key in OPENGPS.Net 
+			`b` URL format: http://livegpstracks.com/bbg.php?imei={ID}
+			`
+		-->
+		
+		<!-- GPS-TRACE.COM ruhavik.gps-trace.com -->
+		<service name="R" type="m" forward="no">10668.flespi.gw:27661</service>
+		
+		<!-- Big Brother GPS -->
+		<!-- http://livegpstracks.com/bbg.php?imei=anonymous_0 -->
+		<service name="B" type="b" forward="yes">http://livegpstracks.com/bbg.php?imei={ID}</service>
+		
+	</forwardServices>
+	<!--
+		Static Objects
+		 
+		You can customize symbol of all objects for each kml file: <kml><symbol>/0</symbol> ... </kml>
+		or for each object in each file: <Placemark><symbol>/0</symbol> ... </Placemark>
+		
+		You can customize callsign format of all objects for each kml file:  <kml><format>ID{0}-{2}</format> .. </kml>,
+		   where {0} - Placemark ID in KML file, {1} firsts 2 symbols of file name, {2} - Placemark name [A-Z0-9]
+		
+		KMLObjectsRadius:		
+		  -1 - Everytime Objects (show always, even client position is not in radius range)
+		  >0 - Static Objects (show if client position is in radius range)
+		Eveytime objects will sends to APRS clients each 10 minutes (You can use it for ex. HOME, START, CHECKPOINT or FINISH)
+		Static objects will sends to APRS each 45 seconds (You can use if for ex. Gas Stations, Medical, Cafe, etc.)
+		
+		You can set radius range to show objects for each APRS user with filter (in APRS auth string):
+			me/10/30 - maximum 30 static objects from me in 10 km range
+			me/10 - static objects from user in 10 km range
+			me/0 - no static objects
+	-->
+	<KMLObjectsRadius help="Show KML objects to APRS client within radius, km (-1 - show always)">7</KMLObjectsRadius>
+	<KMLObjectsLimit help="Limit the number of objects to sent (nearest firsts)">50</KMLObjectsLimit>
+</OruxPalsServerConfig>
