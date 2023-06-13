@@ -1,6 +1,9 @@
-# Orux Pals Server
+# Orux Pals Server / Orux Pals Linux (Cross-Platform)
 
 ## APRS-IS (Automatic Packet Reporting System-Internet Service)
+
+**.Net 7.0 Version***:       
+[OruxPalsLinux](OruxPalsLinux)
 
 **Short about**:
 This is the OruxPalsServer (APRS-IS Server) specially written for OruxMaps Android Application 
