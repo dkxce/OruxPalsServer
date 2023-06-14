@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Downloads\\TEMP\\OruxPalsLinux\\OruxPalsLinux.csproj": {}
+    "C:\\Users\\dkxce\\source\\repos\\OruxPalsLinux\\OruxPalsLinux.csproj": {}
   },
   "projects": {
-    "C:\\Downloads\\TEMP\\OruxPalsLinux\\OruxPalsLinux.csproj": {
+    "C:\\Users\\dkxce\\source\\repos\\OruxPalsLinux\\OruxPalsLinux.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Downloads\\TEMP\\OruxPalsLinux\\OruxPalsLinux.csproj",
+        "projectUniqueName": "C:\\Users\\dkxce\\source\\repos\\OruxPalsLinux\\OruxPalsLinux.csproj",
         "projectName": "OruxPalsServer",
-        "projectPath": "C:\\Downloads\\TEMP\\OruxPalsLinux\\OruxPalsLinux.csproj",
+        "projectPath": "C:\\Users\\dkxce\\source\\repos\\OruxPalsLinux\\OruxPalsLinux.csproj",
         "packagesPath": "C:\\Users\\dkxce\\.nuget\\packages\\",
-        "outputPath": "C:\\Downloads\\TEMP\\OruxPalsLinux\\obj\\",
+        "outputPath": "C:\\Users\\dkxce\\source\\repos\\OruxPalsLinux\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -73,12 +73,31 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Runtime.linux-x64",
+              "version": "[7.0.5, 7.0.5]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[7.0.5, 7.0.5]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Runtime.linux-x64",
+              "version": "[7.0.5, 7.0.5]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        }
+      },
+      "runtimes": {
+        "ubuntu.22.04-x64": {
+          "#import": []
         }
       }
     }
