@@ -36,6 +36,10 @@ STEP 2:
             cd /usr/oruxpals                             # change dir
             ./OruxPalsServer                             # run from application directory
             /usr/oruxpals/OruxPalsServer                 # run from anywhere
+			
+			sudo ufw allow 12015                         # allow traffic       
+			sudo ufw allow 12014                         # allow traffic       
+			sudo ufw allow 12012                         # allow traffic
 
     2.3 RUN ANOTHER THREAD:                             
     
