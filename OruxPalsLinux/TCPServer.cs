@@ -69,22 +69,7 @@ namespace OruxPals
         private bool sendBack = false;
         private bool callsignToUser = true;
         private string infoIP = "127.0.0.1";
-        private List<string> banlist = new List<string>();
-
-        public static void InitCPU()
-        {
-            string path = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            if (IntPtr.Size == 8) // or: if(Environment.Is64BitProcess) // .NET 4.0
-            {
-                File.Copy(Path.Combine(path, "x64") + @"\System.Data.SQLite.dll", path + @"\System.Data.SQLite.dll", true);
-                File.Copy(Path.Combine(path, "x64") + @"\SQLite.Interop.dll", path + @"\SQLite.Interop.dll", true);
-            }
-            else
-            {
-                File.Copy(Path.Combine(path, "x86") + @"\System.Data.SQLite.dll", path + @"\System.Data.SQLite.dll", true);
-                File.Copy(Path.Combine(path, "x86") + @"\SQLite.Interop.dll", path + @"\SQLite.Interop.dll", true);
-            };
-        }
+        private List<string> banlist = new List<string>();        
 
         public OruxPalsServer() 
         {
@@ -1708,7 +1693,7 @@ namespace OruxPals
                             //if (who == "RESTART") 
                             //{
                             //    if (BUDS != null) BUDS.SaveToTempFile();
-                            //    System.Diagnostics.Process.Start(OruxPalsServerConfig.GetCurrentDir() + @"\DelayStart.cmd", Environment.UserInteractive ? "/console" : "/service");                                
+                            //    System.Diagnostics.Process.Start(OruxPalsServerConfig.GetCurrentDir() + @"/DelayStart.cmd", Environment.UserInteractive ? "/console" : "/service");                                
                             //    Environment.Exit(0); 
                             //};
                             resp += "</div>";
@@ -2301,7 +2286,7 @@ namespace OruxPals
             {
                 string resp = GetPageHTMLHeader() + GetPageHeader(6, isAdmin);
                 // resp += "<script type=\"text/javascript\">\r\nvar socket_url = 'ws://" + infoIP + ":" + ServerPort + urlPath + "socket?hide=virtual';\r\n</script>\r\n";
-                string ffn = OruxPalsServerConfig.GetCurrentDir() + @"\MAP\live.html";
+                string ffn = OruxPalsServerConfig.GetCurrentDir() + @"/MAP/live.html";
                 if (File.Exists(ffn))
                 {
                     try
@@ -2495,9 +2480,9 @@ namespace OruxPals
                         string[] sub = ptf.Split(new char[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
                         for (int i = 0; i < sub.Length; i++)
                             sub[i] = sub[i].Replace("..", "00").Replace("%20", " ");
-                        path = String.Join(@"\", sub);
+                        path = String.Join(@"/", sub);
                     };
-                    string full_path = OruxPalsServerConfig.GetCurrentDir() + @"\" + path;
+                    string full_path = OruxPalsServerConfig.GetCurrentDir() + @"/" + path;
                     bool possiblePath = full_path.IndexOfAny(Path.GetInvalidPathChars()) == -1;
                     if (!possiblePath) { HTTPClientSendError(cd.client, 406); return; };
 
@@ -2505,7 +2490,7 @@ namespace OruxPals
                     {
                         string txtout = GetPageHTMLHeader() + GetPageHeader(2, isAdmin); //+ "Resources:\r\n<br/>";
                         {
-                            string readme = full_path + @"\.readme";
+                            string readme = full_path + @"/.readme";
                             if (File.Exists(readme))
                             {
                                 System.IO.FileStream fs = new FileStream(readme, FileMode.Open, FileAccess.Read);
@@ -2519,9 +2504,9 @@ namespace OruxPals
                         txtout += "<table cellpadding=\"1\" cellspacing=\"1\">";
 
                         string rel_path = path;
-                        if (path.LastIndexOf(@"\") > 0)
+                        if (path.LastIndexOf(@"/") > 0)
                         {
-                            rel_path = rel_path.Substring(0, path.LastIndexOf(@"\"));
+                            rel_path = rel_path.Substring(0, path.LastIndexOf(@"/"));
                             txtout += "<tr><td><span style=\"color:silver;\">00</span> - <a href=\"" + urlPath + "v/" + rel_path + "/\" style=\"color:gray;\"><b>[UP]</b><a/></td><td>&nbsp;</td></td>";
                         };
                         // else txtout += "<tr><td><span style=\"color:silver;\">00</span> - <a href=\"" + urlPath + "info\" style=\"color:gray;\"><b>[Main View]</b><a/></td><td>&nbsp;</td></tr>";
@@ -2557,7 +2542,7 @@ namespace OruxPals
                 }
                 else if (ptf == "objects") // send 
                 {
-                    string ffn = OruxPalsServerConfig.GetCurrentDir() + @"\OBJECTS\";
+                    string ffn = OruxPalsServerConfig.GetCurrentDir() + @"/OBJECTS/";
                     string[] flist = Directory.GetFiles(ffn, "*.*", SearchOption.TopDirectoryOnly);
                     string txtout = GetPageHTMLHeader() + GetPageHeader(3, isAdmin);// +"Objects:\r\n<br/>";
                     txtout += "- <a href=\"../info\">&nbsp;..&nbsp;<a/><br/>";
@@ -3179,7 +3164,7 @@ namespace OruxPals
                         res += "]";
 
                         //{
-                        //    System.IO.FileStream fs = new FileStream(OruxPalsServerConfig.GetCurrentDir() + @"\_.txt", FileMode.Create, FileAccess.Write);
+                        //    System.IO.FileStream fs = new FileStream(OruxPalsServerConfig.GetCurrentDir() + @"/_.txt", FileMode.Create, FileAccess.Write);
                         //    byte[] tb = System.Text.Encoding.UTF8.GetBytes(res);
                         //    fs.Write(tb, 0, tb.Length);
                         //    fs.Close();
@@ -3365,7 +3350,7 @@ namespace OruxPals
             int ileft = (idd % 16) * imsz;
             try
             {
-                System.Drawing.Image im = System.Drawing.Image.FromFile(OruxPalsServerConfig.GetCurrentDir() + @"\MAP\images\" + prose + ".png");
+                System.Drawing.Image im = System.Drawing.Image.FromFile(OruxPalsServerConfig.GetCurrentDir() + @"/MAP/images/" + prose + ".png");
                 System.Drawing.Image sm = new System.Drawing.Bitmap(imsz, imsz);
                 System.Drawing.Graphics g = System.Drawing.Graphics.FromImage(sm);
                 g.Clear(System.Drawing.Color.Transparent);
@@ -4036,7 +4021,7 @@ namespace OruxPals
 
         private static void HTTPClientSendFile(TcpClient Client, string fileName, string subdir)
         {
-            string ffn = OruxPalsServerConfig.GetCurrentDir() + @"\" + subdir + @"\" + fileName.Replace("..", "00").Replace("%20"," ");
+            string ffn = OruxPalsServerConfig.GetCurrentDir() + @"/" + subdir + @"/" + fileName.Replace("..", "00").Replace("%20"," ");
             if (!File.Exists(ffn))
             {
                 HTTPClientSendError(Client, 404);
@@ -4482,7 +4467,7 @@ namespace OruxPals
         public static OruxPalsServerConfig LoadFile(string file)
         {
             System.Xml.Serialization.XmlSerializer xs = new System.Xml.Serialization.XmlSerializer(typeof(OruxPalsServerConfig));
-            System.IO.StreamReader reader = System.IO.File.OpenText(GetCurrentDir() + @"\" + file);
+            System.IO.StreamReader reader = System.IO.File.OpenText(GetCurrentDir() + @"/" + file);
             OruxPalsServerConfig c = (OruxPalsServerConfig)xs.Deserialize(reader);
             reader.Close();
             return c;
@@ -4492,8 +4477,18 @@ namespace OruxPals
         {
             string fname = System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase.ToString();
             fname = fname.Replace("file:///", "");
-            fname = fname.Replace("/", @"\");
-            fname = fname.Substring(0, fname.LastIndexOf(@"\") + 1);
+            if (fname.IndexOf(":") < 0)
+            {
+                fname = "/" + fname;
+                fname = fname.Substring(0, Math.Max(fname.LastIndexOf(@"\"), fname.LastIndexOf(@"/")) + 1);
+                fname = fname.TrimEnd('/');
+            }
+            else
+            {
+                fname = fname.Replace("/", @"\");
+                fname = fname.Substring(0, Math.Max(fname.LastIndexOf(@"\"), fname.LastIndexOf(@"/")) + 1);
+                fname = fname.TrimEnd('\\');
+            };
             return fname;
         }
     }

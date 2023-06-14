@@ -52,7 +52,7 @@ namespace OruxPals
         
         public void LoadFromTempFile(CheckRUser checkRegUser)
         {
-            string tmpfile = OruxPalsServerConfig.GetCurrentDir() + @"\buddies.tmp";            
+            string tmpfile = OruxPalsServerConfig.GetCurrentDir() + @"/buddies.tmp";            
             try
             {
                 if (!File.Exists(tmpfile)) return;
@@ -86,7 +86,7 @@ namespace OruxPals
         public void SaveToTempFile()
         {
             if (buddies.Count == 0) return;
-            string tmpfile = OruxPalsServerConfig.GetCurrentDir() + @"\buddies.tmp";
+            string tmpfile = OruxPalsServerConfig.GetCurrentDir() + @"/buddies.tmp";
             try
             {
                 FileStream fs = new FileStream(tmpfile, FileMode.Create, FileAccess.Write);
